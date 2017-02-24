@@ -1,0 +1,27 @@
+{
+  "name": "@tars/registry",
+  "version": "1.0.0",
+  "description": "TARS 框架中用于查询主控",
+  "author": {
+    "name": "Superzheng",
+    "email": "superzheng@tencent.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://git.code.oa.com/taf/taf-registry.git"
+  },
+  "homepage": "http://git.oa.com/taf/taf-registry/",
+  "bugs": {
+    "url": "http://git.oa.com/taf/taf-registry/issues"
+  },
+  "keywords": [
+    "tars",
+    "client",
+    "server"
+  ],
+  "dependencies" : {
+    "@tars/rpc": "latest",
+    "@tars/stream" : "latest"
+  },
+  "license" : "BSD-3-Clause"
+}
