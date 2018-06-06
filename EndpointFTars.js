@@ -14,9 +14,9 @@
  * specific language governing permissions and limitations under the License.
  */
 
-var assert     = require('assert');
-var TarsStream = require('@tars/stream');
+"use strict";
 
+var TarsStream = require("@tars/stream");
 
 var tars = tars || {};
 module.exports.tars = tars;
@@ -37,9 +37,8 @@ tars.EndpointF = function() {
     this._classname = "tars.EndpointF";
 };
 tars.EndpointF._classname = "tars.EndpointF";
-
-tars.EndpointF._write = function (os, tag, value) { os.writeStruct(tag, value); }
-tars.EndpointF._read  = function (is, tag, def) { return is.readStruct(tag, true, def); }
+tars.EndpointF._write = function (os, tag, value) { os.writeStruct(tag, value); };
+tars.EndpointF._read  = function (is, tag, def) { return is.readStruct(tag, true, def); };
 tars.EndpointF._readFrom = function (is) {
     var tmp = new tars.EndpointF();
     tmp.host = is.readString(0, true, "");
@@ -79,55 +78,54 @@ tars.EndpointF.prototype._equal = function (anItem) {
         this.qos === anItem.qos && 
         this.weight === anItem.weight && 
         this.weightType === anItem.weightType;
-}
+};
 tars.EndpointF.prototype._genKey = function () {
     if (!this._proto_struct_name_) {
-        this._proto_struct_name_ = 'STRUCT' + Math.random();
+        this._proto_struct_name_ = "STRUCT" + Math.random();
     }
     return this._proto_struct_name_;
-}
+};
 tars.EndpointF.prototype.toObject = function() { 
-    var tmp = {};
-
-    tmp.host = this.host;
-    tmp.port = this.port;
-    tmp.timeout = this.timeout;
-    tmp.istcp = this.istcp;
-    tmp.grid = this.grid;
-    tmp.groupworkid = this.groupworkid;
-    tmp.grouprealid = this.grouprealid;
-    tmp.setId = this.setId;
-    tmp.qos = this.qos;
-    tmp.bakFlag = this.bakFlag;
-    tmp.weight = this.weight;
-    tmp.weightType = this.weightType;
-    
-    return tmp;
-}
+    return {
+        "host" : this.host,
+        "port" : this.port,
+        "timeout" : this.timeout,
+        "istcp" : this.istcp,
+        "grid" : this.grid,
+        "groupworkid" : this.groupworkid,
+        "grouprealid" : this.grouprealid,
+        "setId" : this.setId,
+        "qos" : this.qos,
+        "bakFlag" : this.bakFlag,
+        "weight" : this.weight,
+        "weightType" : this.weightType
+    };
+};
 tars.EndpointF.prototype.readFromObject = function(json) { 
-    !json.hasOwnProperty("host") || (this.host = json.host);
-    !json.hasOwnProperty("port") || (this.port = json.port);
-    !json.hasOwnProperty("timeout") || (this.timeout = json.timeout);
-    !json.hasOwnProperty("istcp") || (this.istcp = json.istcp);
-    !json.hasOwnProperty("grid") || (this.grid = json.grid);
-    !json.hasOwnProperty("groupworkid") || (this.groupworkid = json.groupworkid);
-    !json.hasOwnProperty("grouprealid") || (this.grouprealid = json.grouprealid);
-    !json.hasOwnProperty("setId") || (this.setId = json.setId);
-    !json.hasOwnProperty("qos") || (this.qos = json.qos);
-    !json.hasOwnProperty("bakFlag") || (this.bakFlag = json.bakFlag);
-    !json.hasOwnProperty("weight") || (this.weight = json.weight);
-    !json.hasOwnProperty("weightType") || (this.weightType = json.weightType);
-}
+    json.hasOwnProperty("host") && (this.host = json.host);
+    json.hasOwnProperty("port") && (this.port = json.port);
+    json.hasOwnProperty("timeout") && (this.timeout = json.timeout);
+    json.hasOwnProperty("istcp") && (this.istcp = json.istcp);
+    json.hasOwnProperty("grid") && (this.grid = json.grid);
+    json.hasOwnProperty("groupworkid") && (this.groupworkid = json.groupworkid);
+    json.hasOwnProperty("grouprealid") && (this.grouprealid = json.grouprealid);
+    json.hasOwnProperty("setId") && (this.setId = json.setId);
+    json.hasOwnProperty("qos") && (this.qos = json.qos);
+    json.hasOwnProperty("bakFlag") && (this.bakFlag = json.bakFlag);
+    json.hasOwnProperty("weight") && (this.weight = json.weight);
+    json.hasOwnProperty("weightType") && (this.weightType = json.weightType);
+};
 tars.EndpointF.prototype.toBinBuffer = function () {
-    var os = new TarsStream.OutputStream();
+    var os = new TarsStream.TarsOutputStream();
     this._writeTo(os);
     return os.getBinBuffer();
-}
+};
 tars.EndpointF.new = function () {
     return new tars.EndpointF();
-}
+};
 tars.EndpointF.create = function (is) {
     return tars.EndpointF._readFrom(is);
-}
+};
+
 
 

@@ -14,9 +14,11 @@
  * specific language governing permissions and limitations under the License.
  */
 
-var TarsStream = require('@tars/stream');
-var TarsError  = require('@tars/rpc').error;
-var _TARS_MODULE_A_ = require('./EndpointFTars.js');
+"use strict";
+
+var TarsStream = require("@tars/stream");
+var TarsError  = require("@tars/rpc").error;
+var _TARS_MODULE_A_ = require("./EndpointFTars.js");
 
 var tars = tars || {};
 module.exports.tars = tars;
@@ -24,256 +26,302 @@ module.exports.tars = tars;
 tars.QueryFProxy = function () {
     this._name   = undefined;
     this._worker = undefined;
-}
+};
 
 tars.QueryFProxy.prototype.setTimeout = function (iTimeout) {
     this._worker.timeout = iTimeout;
-}
+};
 
-tars.QueryFProxy.prototype.getTimeout = function ( ) {
+tars.QueryFProxy.prototype.getTimeout = function () {
     return this._worker.timeout;
-}
+};
 
+
+var __tars_QueryF$findObjectById$EN = function (id) {
+    var os = new TarsStream.TarsOutputStream();
+    os.writeString(1, id);
+    return os.getBinBuffer();
+};
+
+var __tars_QueryF$findObjectById$DE = function (data) {
+    try {
+        var is = new TarsStream.TarsInputStream(data.response.sBuffer);
+        return {
+            "request" : data.request,
+            "response" : {
+                "costtime" : data.request.costtime,
+                "return" : is.readList(0, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF))
+            }
+        };
+    } catch (e) {
+        throw {
+            "request" : data.request,
+            "response" : {
+                "costtime" : data.request.costtime,
+                "error" : {
+                    "code" : TarsError.CLIENT.DECODE_ERROR,
+                    "message" : e.message
+                }
+            }
+        };
+    }
+};
+
+var __tars_QueryF$findObjectById$ER = function (data) {
+    throw {
+        "request" : data.request,
+        "response" : {
+            "costtime" : data.request.costtime,
+            "error" : data.error
+        }
+    }
+};
 
 tars.QueryFProxy.prototype.findObjectById = function (id) {
-    var _encode = function () { 
-        var os = new TarsStream.OutputStream();
-        os.writeString(1, id);
-        return os.getBinBuffer();
+    return this._worker.tars_invoke("findObjectById", __tars_QueryF$findObjectById$EN(id), arguments[arguments.length - 1]).then(__tars_QueryF$findObjectById$DE, __tars_QueryF$findObjectById$ER);
+};
+
+var __tars_QueryF$findObjectById4All$EN = function (id) {
+    var os = new TarsStream.TarsOutputStream();
+    os.writeString(1, id);
+    return os.getBinBuffer();
+};
+
+var __tars_QueryF$findObjectById4All$DE = function (data) {
+    try {
+        var is = new TarsStream.TarsInputStream(data.response.sBuffer);
+        return {
+            "request" : data.request,
+            "response" : {
+                "costtime" : data.request.costtime,
+                "return" : is.readInt32(0, true, 0),
+                "arguments" : {
+                    "activeEp" : is.readList(2, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF)),
+                    "inactiveEp" : is.readList(3, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF))
+                }
+            }
+        };
+    } catch (e) {
+        throw {
+            "request" : data.request,
+            "response" : {
+                "costtime" : data.request.costtime,
+                "error" : {
+                    "code" : TarsError.CLIENT.DECODE_ERROR,
+                    "message" : e.message
+                }
+            }
+        };
     }
+};
 
-    var _decode = function (data) {
-        try {
-            var response = {arguments:{}};
-            var is = new TarsStream.InputStream(data.response.sBuffer);
-
-            response.costtime = data.request.costtime;
-            response.return   = is.readList(0, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF));
-
-            return {request:data.request, response:response};
-        } catch (e) {
-            var response = { };
-            response.costtime      = data.request.costtime;
-            response.error         = {};
-            response.error.code    = TarsError.CLIENT.DECODE_ERROR;
-            response.error.message = e.message;
-
-            throw { request : data.request, response : response};
+var __tars_QueryF$findObjectById4All$ER = function (data) {
+    throw {
+        "request" : data.request,
+        "response" : {
+            "costtime" : data.request.costtime,
+            "error" : data.error
         }
     }
-
-    var _error = function(data) {
-        var response = {};
-        response.costtime = data.request.costtime;
-        response.error    = data.error;
-
-        throw {request:data.request, response:response};
-    }
-
-    return this._worker.tars_invoke('findObjectById', _encode(), arguments.length != 0?arguments[arguments.length - 1]:undefined).then(_decode, _error);
-}
+};
 
 tars.QueryFProxy.prototype.findObjectById4All = function (id) {
-    var _encode = function () { 
-        var os = new TarsStream.OutputStream();
-        os.writeString(1, id);
-        return os.getBinBuffer();
+    return this._worker.tars_invoke("findObjectById4All", __tars_QueryF$findObjectById4All$EN(id), arguments[arguments.length - 1]).then(__tars_QueryF$findObjectById4All$DE, __tars_QueryF$findObjectById4All$ER);
+};
+
+var __tars_QueryF$findObjectById4Any$EN = function (id) {
+    var os = new TarsStream.TarsOutputStream();
+    os.writeString(1, id);
+    return os.getBinBuffer();
+};
+
+var __tars_QueryF$findObjectById4Any$DE = function (data) {
+    try {
+        var is = new TarsStream.TarsInputStream(data.response.sBuffer);
+        return {
+            "request" : data.request,
+            "response" : {
+                "costtime" : data.request.costtime,
+                "return" : is.readInt32(0, true, 0),
+                "arguments" : {
+                    "activeEp" : is.readList(2, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF)),
+                    "inactiveEp" : is.readList(3, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF))
+                }
+            }
+        };
+    } catch (e) {
+        throw {
+            "request" : data.request,
+            "response" : {
+                "costtime" : data.request.costtime,
+                "error" : {
+                    "code" : TarsError.CLIENT.DECODE_ERROR,
+                    "message" : e.message
+                }
+            }
+        };
     }
+};
 
-    var _decode = function (data) {
-        try {
-            var response = {arguments:{}};
-            var is = new TarsStream.InputStream(data.response.sBuffer);
-
-            response.costtime = data.request.costtime;
-            response.return   = is.readInt32(0, true, TarsStream.Int32);
-            response.arguments.activeEp = is.readList(2, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF));
-            response.arguments.inactiveEp = is.readList(3, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF));
-
-            return {request:data.request, response:response};
-        } catch (e) {
-            var response = { };
-            response.costtime      = data.request.costtime;
-            response.error         = {};
-            response.error.code    = TarsError.CLIENT.DECODE_ERROR;
-            response.error.message = e.message;
-
-            throw { request : data.request, response : response};
+var __tars_QueryF$findObjectById4Any$ER = function (data) {
+    throw {
+        "request" : data.request,
+        "response" : {
+            "costtime" : data.request.costtime,
+            "error" : data.error
         }
     }
-
-    var _error = function(data) {
-        var response = {};
-        response.costtime = data.request.costtime;
-        response.error    = data.error;
-
-        throw {request:data.request, response:response};
-    }
-
-    return this._worker.tars_invoke('findObjectById4All', _encode(), arguments.length != 0?arguments[arguments.length - 1]:undefined).then(_decode, _error);
-}
+};
 
 tars.QueryFProxy.prototype.findObjectById4Any = function (id) {
-    var _encode = function () { 
-        var os = new TarsStream.OutputStream();
-        os.writeString(1, id);
-        return os.getBinBuffer();
+    return this._worker.tars_invoke("findObjectById4Any", __tars_QueryF$findObjectById4Any$EN(id), arguments[arguments.length - 1]).then(__tars_QueryF$findObjectById4Any$DE, __tars_QueryF$findObjectById4Any$ER);
+};
+
+var __tars_QueryF$findObjectByIdInSameGroup$EN = function (id) {
+    var os = new TarsStream.TarsOutputStream();
+    os.writeString(1, id);
+    return os.getBinBuffer();
+};
+
+var __tars_QueryF$findObjectByIdInSameGroup$DE = function (data) {
+    try {
+        var is = new TarsStream.TarsInputStream(data.response.sBuffer);
+        return {
+            "request" : data.request,
+            "response" : {
+                "costtime" : data.request.costtime,
+                "return" : is.readInt32(0, true, 0),
+                "arguments" : {
+                    "activeEp" : is.readList(2, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF)),
+                    "inactiveEp" : is.readList(3, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF))
+                }
+            }
+        };
+    } catch (e) {
+        throw {
+            "request" : data.request,
+            "response" : {
+                "costtime" : data.request.costtime,
+                "error" : {
+                    "code" : TarsError.CLIENT.DECODE_ERROR,
+                    "message" : e.message
+                }
+            }
+        };
     }
+};
 
-    var _decode = function (data) {
-        try {
-            var response = {arguments:{}};
-            var is = new TarsStream.InputStream(data.response.sBuffer);
-
-            response.costtime = data.request.costtime;
-            response.return   = is.readInt32(0, true, TarsStream.Int32);
-            response.arguments.activeEp = is.readList(2, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF));
-            response.arguments.inactiveEp = is.readList(3, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF));
-
-            return {request:data.request, response:response};
-        } catch (e) {
-            var response = { };
-            response.costtime      = data.request.costtime;
-            response.error         = {};
-            response.error.code    = TarsError.CLIENT.DECODE_ERROR;
-            response.error.message = e.message;
-
-            throw { request : data.request, response : response};
+var __tars_QueryF$findObjectByIdInSameGroup$ER = function (data) {
+    throw {
+        "request" : data.request,
+        "response" : {
+            "costtime" : data.request.costtime,
+            "error" : data.error
         }
     }
-
-    var _error = function(data) {
-        var response = {};
-        response.costtime = data.request.costtime;
-        response.error    = data.error;
-
-        throw {request:data.request, response:response};
-    }
-
-    return this._worker.tars_invoke('findObjectById4Any', _encode(), arguments.length != 0?arguments[arguments.length - 1]:undefined).then(_decode, _error);
-}
+};
 
 tars.QueryFProxy.prototype.findObjectByIdInSameGroup = function (id) {
-    var _encode = function () { 
-        var os = new TarsStream.OutputStream();
-        os.writeString(1, id);
-        return os.getBinBuffer();
+    return this._worker.tars_invoke("findObjectByIdInSameGroup", __tars_QueryF$findObjectByIdInSameGroup$EN(id), arguments[arguments.length - 1]).then(__tars_QueryF$findObjectByIdInSameGroup$DE, __tars_QueryF$findObjectByIdInSameGroup$ER);
+};
+
+var __tars_QueryF$findObjectByIdInSameSet$EN = function (id, setId) {
+    var os = new TarsStream.TarsOutputStream();
+    os.writeString(1, id);
+    os.writeString(2, setId);
+    return os.getBinBuffer();
+};
+
+var __tars_QueryF$findObjectByIdInSameSet$DE = function (data) {
+    try {
+        var is = new TarsStream.TarsInputStream(data.response.sBuffer);
+        return {
+            "request" : data.request,
+            "response" : {
+                "costtime" : data.request.costtime,
+                "return" : is.readInt32(0, true, 0),
+                "arguments" : {
+                    "activeEp" : is.readList(3, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF)),
+                    "inactiveEp" : is.readList(4, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF))
+                }
+            }
+        };
+    } catch (e) {
+        throw {
+            "request" : data.request,
+            "response" : {
+                "costtime" : data.request.costtime,
+                "error" : {
+                    "code" : TarsError.CLIENT.DECODE_ERROR,
+                    "message" : e.message
+                }
+            }
+        };
     }
+};
 
-    var _decode = function (data) {
-        try {
-            var response = {arguments:{}};
-            var is = new TarsStream.InputStream(data.response.sBuffer);
-
-            response.costtime = data.request.costtime;
-            response.return   = is.readInt32(0, true, TarsStream.Int32);
-            response.arguments.activeEp = is.readList(2, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF));
-            response.arguments.inactiveEp = is.readList(3, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF));
-
-            return {request:data.request, response:response};
-        } catch (e) {
-            var response = { };
-            response.costtime      = data.request.costtime;
-            response.error         = {};
-            response.error.code    = TarsError.CLIENT.DECODE_ERROR;
-            response.error.message = e.message;
-
-            throw { request : data.request, response : response};
+var __tars_QueryF$findObjectByIdInSameSet$ER = function (data) {
+    throw {
+        "request" : data.request,
+        "response" : {
+            "costtime" : data.request.costtime,
+            "error" : data.error
         }
     }
-
-    var _error = function(data) {
-        var response = {};
-        response.costtime = data.request.costtime;
-        response.error    = data.error;
-
-        throw {request:data.request, response:response};
-    }
-
-    return this._worker.tars_invoke('findObjectByIdInSameGroup', _encode(), arguments.length != 0?arguments[arguments.length - 1]:undefined).then(_decode, _error);
-}
+};
 
 tars.QueryFProxy.prototype.findObjectByIdInSameSet = function (id, setId) {
-    var _encode = function () { 
-        var os = new TarsStream.OutputStream();
-        os.writeString(1, id);
-        os.writeString(2, setId);
-        return os.getBinBuffer();
+    return this._worker.tars_invoke("findObjectByIdInSameSet", __tars_QueryF$findObjectByIdInSameSet$EN(id, setId), arguments[arguments.length - 1]).then(__tars_QueryF$findObjectByIdInSameSet$DE, __tars_QueryF$findObjectByIdInSameSet$ER);
+};
+
+var __tars_QueryF$findObjectByIdInSameStation$EN = function (id, sStation) {
+    var os = new TarsStream.TarsOutputStream();
+    os.writeString(1, id);
+    os.writeString(2, sStation);
+    return os.getBinBuffer();
+};
+
+var __tars_QueryF$findObjectByIdInSameStation$DE = function (data) {
+    try {
+        var is = new TarsStream.TarsInputStream(data.response.sBuffer);
+        return {
+            "request" : data.request,
+            "response" : {
+                "costtime" : data.request.costtime,
+                "return" : is.readInt32(0, true, 0),
+                "arguments" : {
+                    "activeEp" : is.readList(3, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF)),
+                    "inactiveEp" : is.readList(4, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF))
+                }
+            }
+        };
+    } catch (e) {
+        throw {
+            "request" : data.request,
+            "response" : {
+                "costtime" : data.request.costtime,
+                "error" : {
+                    "code" : TarsError.CLIENT.DECODE_ERROR,
+                    "message" : e.message
+                }
+            }
+        };
     }
+};
 
-    var _decode = function (data) {
-        try {
-            var response = {arguments:{}};
-            var is = new TarsStream.InputStream(data.response.sBuffer);
-
-            response.costtime = data.request.costtime;
-            response.return   = is.readInt32(0, true, TarsStream.Int32);
-            response.arguments.activeEp = is.readList(3, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF));
-            response.arguments.inactiveEp = is.readList(4, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF));
-
-            return {request:data.request, response:response};
-        } catch (e) {
-            var response = { };
-            response.costtime      = data.request.costtime;
-            response.error         = {};
-            response.error.code    = TarsError.CLIENT.DECODE_ERROR;
-            response.error.message = e.message;
-
-            throw { request : data.request, response : response};
+var __tars_QueryF$findObjectByIdInSameStation$ER = function (data) {
+    throw {
+        "request" : data.request,
+        "response" : {
+            "costtime" : data.request.costtime,
+            "error" : data.error
         }
     }
-
-    var _error = function(data) {
-        var response = {};
-        response.costtime = data.request.costtime;
-        response.error    = data.error;
-
-        throw {request:data.request, response:response};
-    }
-
-    return this._worker.tars_invoke('findObjectByIdInSameSet', _encode(), arguments.length != 0?arguments[arguments.length - 1]:undefined).then(_decode, _error);
-}
+};
 
 tars.QueryFProxy.prototype.findObjectByIdInSameStation = function (id, sStation) {
-    var _encode = function () { 
-        var os = new TarsStream.OutputStream();
-        os.writeString(1, id);
-        os.writeString(2, sStation);
-        return os.getBinBuffer();
-    }
-
-    var _decode = function (data) {
-        try {
-            var response = {arguments:{}};
-            var is = new TarsStream.InputStream(data.response.sBuffer);
-
-            response.costtime = data.request.costtime;
-            response.return   = is.readInt32(0, true, TarsStream.Int32);
-            response.arguments.activeEp = is.readList(3, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF));
-            response.arguments.inactiveEp = is.readList(4, true, TarsStream.List(_TARS_MODULE_A_.tars.EndpointF));
-
-            return {request:data.request, response:response};
-        } catch (e) {
-            var response = { };
-            response.costtime      = data.request.costtime;
-            response.error         = {};
-            response.error.code    = TarsError.CLIENT.DECODE_ERROR;
-            response.error.message = e.message;
-
-            throw { request : data.request, response : response};
-        }
-    }
-
-    var _error = function(data) {
-        var response = {};
-        response.costtime = data.request.costtime;
-        response.error    = data.error;
-
-        throw {request:data.request, response:response};
-    }
-
-    return this._worker.tars_invoke('findObjectByIdInSameStation', _encode(), arguments.length != 0?arguments[arguments.length - 1]:undefined).then(_decode, _error);
-}
+    return this._worker.tars_invoke("findObjectByIdInSameStation", __tars_QueryF$findObjectByIdInSameStation$EN(id, sStation), arguments[arguments.length - 1]).then(__tars_QueryF$findObjectByIdInSameStation$DE, __tars_QueryF$findObjectByIdInSameStation$ER);
+};
 
 
 
