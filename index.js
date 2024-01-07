@@ -83,7 +83,7 @@ client.prototype.findObjectById = function (id) {
         this.initialize();
     }
 
-    return this._proxy.findObjectById(id, {context: {nodename: this._node_name}});
+    return this._proxy.findObjectById(id, {context: {node_name: this._node_name}});
 };
 
 /**
@@ -96,7 +96,7 @@ client.prototype.findObjectById4Any = function (id) {
         this.initialize();
     }
 
-    return this._proxy.findObjectById4Any(id, {context: {nodename: this._node_name}});
+    return this._proxy.findObjectById4Any(id, {context: {node_name: this._node_name}});
 };
 
 /**
@@ -109,7 +109,7 @@ client.prototype.findObjectById4All = function (id) {
         this.initialize();
     }
 
-    return this._proxy.findObjectById4All(id, {context: {nodename: this._node_name}});
+    return this._proxy.findObjectById4All(id, {context: {node_name: this._node_name}});
 };
 
 /**
@@ -122,7 +122,7 @@ client.prototype.findObjectByIdInSameGroup = function (id) {
         this.initialize();
     }
 
-    return this._proxy.findObjectByIdInSameGroup(id, {context: {nodename: this._node_name}});
+    return this._proxy.findObjectByIdInSameGroup(id, {context: {node_name: this._node_name}});
 };
 
 /**
@@ -136,7 +136,7 @@ client.prototype.findObjectByIdInSameStation = function (id, sStation) {
         this.initialize();
     }
 
-    return this._proxy.findObjectByIdInSameStation(id, sStation, {context: {nodename: this._node_name}});
+    return this._proxy.findObjectByIdInSameStation(id, sStation, {context: {node_name: this._node_name}});
 };
 
 /**
@@ -150,7 +150,7 @@ client.prototype.findObjectByIdInSameSet = function (id, setId) {
         this.initialize();
     }
 
-    return this._proxy.findObjectByIdInSameSet(id, setId, {context: {nodename: this._node_name}});
+    return this._proxy.findObjectByIdInSameSet(id, setId, {context: {node_name: this._node_name}});
 };
 
 var instance=client.prototype.New();
