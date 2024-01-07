@@ -15,7 +15,7 @@
  */
 
 'use strict';
-
+var os = require("os");
 var registryTars, EndpointTars, tarsRpc;
 var tarsInstance = undefined;
 
@@ -67,9 +67,29 @@ client.prototype.initialize = function() {
 
     tarsInstance = tarsRpc.Communicator.New();
     this._proxy = tarsInstance.stringToProxy(registryTars.QueryFProxy, this._locator);
-    // 调用主控时传递 nodename，若没有则将 localip 当做 nodename 传递
+    // 获取当前节点的 nodename
+    // 第一优先级：获取框架配置中的 nodename
     var nodename = tarsInstance.configure.get("tars.application.server.nodename", "");
+    // 第二优先级：获取框架配置中的 localip
     if (!nodename) nodename = tarsInstance.configure.get("tars.application.server.localip", "");
+    // 第三优先级：获取本地 IP，优先获取 IPv4，没有则获取 IPv6
+    if (!nodename) {
+        var networkInterfaces = os.networkInterfaces(), ipv4 = '', ipv6 = '';
+        for (var key in networkInterfaces) {
+            var iface = networkInterfaces[key];
+            for (var i = 0; i < iface.length; i++) {
+                var address = iface[i];
+                if (address.family === 'IPv4' && !address.internal && !ipv4) {
+                    ipv4 = address.address;
+                } else if (address.family === 'IPv6' && !address.internal && !ipv6) {
+                    ipv6 = address.address;
+                }
+            }
+        }
+        nodename = ipv4 || ipv6;
+    }
+    // 第四优先级：设置为 127.0.0.1
+    if (!nodename) nodename = "127.0.0.1";
     this._node_name = nodename;
 };
 

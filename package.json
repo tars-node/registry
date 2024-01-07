@@ -1,6 +1,6 @@
 {
   "name": "@tars/registry",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "TARS 框架中用于查询主控",
   "author": {
     "name": "Superzheng",
