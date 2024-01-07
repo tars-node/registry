@@ -68,10 +68,14 @@ client.prototype.initialize = function() {
     tarsInstance = tarsRpc.Communicator.New();
     this._proxy = tarsInstance.stringToProxy(registryTars.QueryFProxy, this._locator);
     // 获取当前节点的 nodename
-    // 第一优先级：获取框架配置中的 nodename
-    var nodename = tarsInstance.configure.get("tars.application.server.nodename", "");
-    // 第二优先级：获取框架配置中的 localip
-    if (!nodename) nodename = tarsInstance.configure.get("tars.application.server.localip", "");
+    var nodename = "";
+    // node-agent < 2.1.2 版本中初始化时未读取框架配置，这里做一下兼容
+    if (tarsInstance.configure) {
+        // 第一优先级：获取框架配置中的 nodename
+        nodename = tarsInstance.configure.get("tars.application.server.nodename", "");
+        // 第二优先级：获取框架配置中的 localip
+        if (!nodename) nodename = tarsInstance.configure.get("tars.application.server.localip", "");
+    }
     // 第三优先级：获取本地 IP，优先获取 IPv4，没有则获取 IPv6
     if (!nodename) {
         var networkInterfaces = os.networkInterfaces(), ipv4 = '', ipv6 = '';
