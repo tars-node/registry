@@ -19,9 +19,9 @@
     "client",
     "server"
   ],
-  "dependencies" : {
+  "dependencies": {
     "@tars/rpc": "latest",
-    "@tars/stream" : "latest"
+    "@tars/stream": "latest"
   },
-  "license" : "BSD-3-Clause"
+  "license": "BSD-3-Clause"
 }

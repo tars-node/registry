@@ -17,29 +17,36 @@
 'use strict';
 
 var registryTars, EndpointTars, tarsRpc;
-var TarsClient = undefined;
+var tarsInstance = undefined;
 
 var client = function() {};
 
-client._locator = "";
-client._proxy = undefined;
+client.prototype._locator   = "";
+client.prototype._proxy     = undefined;
+client.prototype._node_name   = "";
+client.prototype.New=function(){
+    var instance=new client();
+    // 对外暴露Endpoint对象， 便于使用Endpoint对象（EndpointTars.Endpoint）
+    instance.__defineGetter__("EndpointTars", function () {
+        if(EndpointTars)
+        {
+            return EndpointTars;
+        }
+        else
+        {
+            return require('./EndpointFTars.js').tars;
+        }
+    });
+    return instance;
+}
 
-// 对外暴露Endpoint对象， 便于使用Endpoint对象（EndpointTars.Endpoint）
-client.__defineGetter__("EndpointTars", function() {
-    if (EndpointTars) {
-        return EndpointTars;
-    } else {
-        return require('./EndpointFTars.js').tars;
-    }
-});
-
-client.setLocator = function(sLocator) {
-    client._locator = sLocator;
+client.prototype.setLocator = function (sLocator) {
+    this._locator = sLocator;
 };
 
 // 重新设置locator，需要重新初始化
-client.resetLocator = function(sLocator) {
-    client._locator = sLocator;
+client.prototype.resetLocator = function(sLocator) {
+    this._locator = sLocator;
 
     if (!tarsRpc) {
         tarsRpc = require("@tars/rpc");
@@ -47,19 +54,23 @@ client.resetLocator = function(sLocator) {
         EndpointTars = require('./EndpointFTars.js').tars;
     }
 
-    TarsClient = tarsRpc.Communicator.New();
-    client._proxy = undefined;
+    tarsInstance = tarsRpc.Communicator.New();
+    this._proxy = undefined;
 };
 
-client.initialize = function() {
+client.prototype.initialize = function() {
     if (!tarsRpc) {
         tarsRpc = require("@tars/rpc");
         registryTars = require("./QueryFProxy.js").tars;
         EndpointTars = require('./EndpointFTars.js').tars;
     }
 
-    TarsClient = tarsRpc.Communicator.New();
-    client._proxy = TarsClient.stringToProxy(registryTars.QueryFProxy, client._locator);
+    tarsInstance = tarsRpc.Communicator.New();
+    this._proxy = tarsInstance.stringToProxy(registryTars.QueryFProxy, this._locator);
+    // 调用主控时传递 nodename，若没有则将 localip 当做 nodename 传递
+    var nodename = tarsInstance.configure.get("tars.application.server.nodename", "");
+    if (!nodename) nodename = tarsInstance.configure.get("tars.application.server.localip", "");
+    this._node_name = nodename;
 };
 
 /**
@@ -67,12 +78,12 @@ client.initialize = function() {
  * @param id 对象名称
  * @returns {*}
  */
-client.findObjectById = function(id) {
-    if (!client._proxy) {
-        client.initialize();
+client.prototype.findObjectById = function (id) {
+    if (!this._proxy) {
+        this.initialize();
     }
 
-    return client._proxy.findObjectById(id);
+    return this._proxy.findObjectById(id, {context: {nodename: this._node_name}});
 };
 
 /**
@@ -80,12 +91,12 @@ client.findObjectById = function(id) {
  * @param id 对象名称
  * @returns {*}
  */
-client.findObjectById4Any = function(id) {
-    if (!client._proxy) {
-        client.initialize();
+client.prototype.findObjectById4Any = function (id) {
+    if (!this._proxy) {
+        this.initialize();
     }
 
-    return client._proxy.findObjectById4Any(id);
+    return this._proxy.findObjectById4Any(id, {context: {nodename: this._node_name}});
 };
 
 /**
@@ -93,12 +104,12 @@ client.findObjectById4Any = function(id) {
  * @param id 对象名称
  * @returns {*}
  */
-client.findObjectById4All = function(id) {
-    if (!client._proxy) {
-        client.initialize();
+client.prototype.findObjectById4All = function (id) {
+    if (!this._proxy) {
+        this.initialize();
     }
 
-    return client._proxy.findObjectById4All(id);
+    return this._proxy.findObjectById4All(id, {context: {nodename: this._node_name}});
 };
 
 /**
@@ -106,12 +117,12 @@ client.findObjectById4All = function(id) {
  * @param id 对象名称
  * @returns {*}
  */
-client.findObjectByIdInSameGroup = function(id) {
-    if (!client._proxy) {
-        client.initialize();
+client.prototype.findObjectByIdInSameGroup = function (id) {
+    if (!this._proxy) {
+        this.initialize();
     }
 
-    return client._proxy.findObjectByIdInSameGroup(id);
+    return this._proxy.findObjectByIdInSameGroup(id, {context: {nodename: this._node_name}});
 };
 
 /**
@@ -120,12 +131,12 @@ client.findObjectByIdInSameGroup = function(id) {
  * @param sStation 归属地
  * @returns {*}
  */
-client.findObjectByIdInSameStation = function(id, sStation) {
-    if (!client._proxy) {
-        client.initialize();
+client.prototype.findObjectByIdInSameStation = function (id, sStation) {
+    if (!this._proxy) {
+        this.initialize();
     }
 
-    return client._proxy.findObjectByIdInSameStation(id, sStation);
+    return this._proxy.findObjectByIdInSameStation(id, sStation, {context: {nodename: this._node_name}});
 };
 
 /**
@@ -134,12 +145,14 @@ client.findObjectByIdInSameStation = function(id, sStation) {
  * @param setId set全称,格式为name.area.group
  * @returns {*}
  */
-client.findObjectByIdInSameSet = function(id, setId) {
-    if (!client._proxy) {
-        client.initialize();
+client.prototype.findObjectByIdInSameSet = function (id, setId) {
+    if (!this._proxy) {
+        this.initialize();
     }
 
-    return client._proxy.findObjectByIdInSameSet(id, setId);
+    return this._proxy.findObjectByIdInSameSet(id, setId, {context: {nodename: this._node_name}});
 };
 
-module.exports = client;
+var instance=client.prototype.New();
+
+module.exports = instance;
